@@ -13,7 +13,7 @@ const Nav = () => {
                     </Nav2>
                     <Nav2>
                         <Nav2.Link href="/login">Login</Nav2.Link>
-                        <Nav2.Link eventKey={2} href="#memes">
+                        <Nav2.Link eventKey={2} href="/registration">
                             Registration
                         </Nav2.Link>
                     </Nav2>
