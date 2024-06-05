@@ -3,6 +3,8 @@ import Form from 'react-bootstrap/Form';
 import Nav from "../Layouts/Nav";
 import { Button, Card, Container } from "react-bootstrap";
 import axios from "axios";
+import { useAuth } from "./authContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [validated, setValidated] = useState(false);
@@ -11,6 +13,9 @@ const Login = () => {
         username: '',
         password: ''
     })
+    const navigate = useNavigate();
+
+    const { login } = useAuth();
 
     const handleFormSubmit = (event) => {
         debugger;
@@ -44,13 +49,18 @@ const Login = () => {
     }
 
     const handleApi = () => {
-        axios.post('https://dummyjson.com/auth/login', formValues, {
+        const payload = {
+            ...formValues,
+            expiresInMins: 30
+        }
+        axios.post('https://dummyjson.com/auth/login', payload, {
             'Content-Type': 'application/json'
         }).then(res => {
             console.log('res', res);
             if (res.status === 200) {
-                const { token } = res.data;
-                sessionStorage.setItem('token', token);
+               
+                login(res.data);
+                navigate('/');
             }
         }).catch(error => {
             console.error('error', error);
