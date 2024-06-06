@@ -13,7 +13,10 @@ export const AuthProvider = ({ children }) => {
     console.log('user', user);
 
     const login = (userData) => setUser(userData);
-    const logout = () => setUser(null);
+    const logout = () => {
+        setUser(null);
+        sessionStorage.clear();
+    };
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>

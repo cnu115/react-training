@@ -1,9 +1,9 @@
 import React from "react";
-import { Navbar, Container, Nav as Nav2, NavDropdown } from 'react-bootstrap';
+import { Navbar, Container, Nav as Nav2 } from 'react-bootstrap';
 import { useAuth } from "../Auth/authContext";
 
 const Nav = () => {
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
             <Container>
@@ -13,7 +13,9 @@ const Nav = () => {
                     <Nav2 className="me-auto">
                         <Nav2.Link href="/">Home</Nav2.Link>
                     </Nav2>
-                    {user !== null ? <Nav2><Nav2.Link href="/logout">Logout</Nav2.Link></Nav2> :
+                    {user !== null ? <Nav2>
+                        <button className="nav-link" onClick={logout} >Logout</button>
+                    </Nav2> :
                         (<Nav2>
                             <Nav2.Link href="/login">Login</Nav2.Link>
                             <Nav2.Link eventKey={2} href="/registration">

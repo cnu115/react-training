@@ -18,7 +18,6 @@ const Login = () => {
     const { login } = useAuth();
 
     const handleFormSubmit = (event) => {
-        debugger;
         event.preventDefault()
         const target = event.currentTarget;
         if (target.checkValidity() === false) {
@@ -40,12 +39,6 @@ const Login = () => {
 
         setFormValues(oldFormValues);
 
-
-        // setFormValues({
-        //     ...formValues,
-        //     [name]: value
-        // });
-
     }
 
     const handleApi = () => {
@@ -58,7 +51,7 @@ const Login = () => {
         }).then(res => {
             console.log('res', res);
             if (res.status === 200) {
-               
+                sessionStorage.setItem('token', res.data.token);
                 login(res.data);
                 navigate('/');
             }
