@@ -8,15 +8,20 @@ export const useAuth = () => useContext(AuthContext); //consumer state managemen
 
 
 export const AuthProvider = ({ children }) => {
+    //global state
     const [user, setUser] = useState(null);
-
+    //global state
     console.log('user', user);
 
+    //global functions
     const login = (userData) => setUser(userData);
     const logout = () => {
         setUser(null);
         sessionStorage.clear();
     };
+    //global functions
+
+
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>

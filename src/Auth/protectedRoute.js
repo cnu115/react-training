@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './authContext';
-import { userAuthInfo } from '../services';
+import { userAuthInfo } from '../Api/services';
 
 
 const ProtectedRoute = ({ children }) => {

@@ -5,13 +5,14 @@ import Login from "./Auth/login";
 import Registration from "./Auth/registration";
 import { AuthProvider } from "./Auth/authContext";
 import ProtectedRoute from "./Auth/protectedRoute";
+import Products from "./Components/Products";
 
 const Router = () => {
   return (
     <AuthProvider>
       <Routes>
         <Route path="/" element={<ProtectedRoute>
-          <Home />
+          <Products />
         </ProtectedRoute>} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />

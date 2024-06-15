@@ -68,3 +68,74 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+## React Context API 
+The React Context API is a feature that allows you to manage global state in a React application without prop drilling (passing props through intermediate components). It provides a way to share values like themes, user authentication status, or any other global data across the component tree.
+
+### Key Concepts:
+
+1. **Provider**: The `Provider` component is used to wrap the part of your application where you want to make the shared data available. It accepts a `value` prop which can be any JavaScript value (object, array, string, etc.).
+
+2. **Consumer**: The `Consumer` component allows you to access the `value` from the nearest `Provider` in the component tree. This component uses a render prop (or function as children) pattern to access and consume the `value`.
+
+3. **createContext**: This function creates a new context object. It takes an optional parameter for the default value which is used when a component does not find a matching `Provider` above it in the tree.
+
+### Workflow:
+
+- **Create a Context**: Use `createContext` to create a new context object. This object will provide a `Provider` and a `Consumer`.
+
+- **Wrap Components**: Wrap the components that need access to the context with a `Provider`, passing in the necessary `value`.
+
+- **Consume Context**: Use the `Consumer` component or `useContext` hook within child components to access the context's `value`.
+
+### Example (using Functional Components and Hooks):
+
+```jsx
+// Step 1: Create a context
+const ThemeContext = React.createContext('light');
+
+// Step 2: Wrap the components that need access to the context
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Toolbar />
+    </ThemeContext.Provider>
+  );
+}
+
+// Step 3: Consume the context
+function Toolbar() {
+  const theme = React.useContext(ThemeContext);
+  return (
+    <div>
+      <Button theme={theme} />
+    </div>
+  );
+}
+
+function Button({ theme }) {
+  return <button className={theme}>Click me</button>;
+}
+```
+
+### useContext Hook (alternative to Consumer):
+
+- The `useContext` hook allows functional components to consume context directly, eliminating the need for `Consumer` components.
+
+```jsx
+function Button() {
+  const theme = React.useContext(ThemeContext);
+  return <button className={theme}>Click me</button>;
+}
+```
+
+### Benefits:
+
+- **Avoids Prop Drilling**: Context API helps avoid passing props through intermediate components that don't need them, making the code cleaner.
+  
+- **Global State Management**: Useful for managing global state such as themes, user authentication, localization, etc., without resorting to state management libraries like Redux in simpler cases.
+
+- **Simplifies Component Composition**: Allows components to be more focused on their primary purpose by delegating state management to higher-level components.
+
+The React Context API is powerful for managing state that needs to be accessed by many components at different levels of the component tree, providing a cleaner alternative to prop drilling and reducing complexity in larger applications.
