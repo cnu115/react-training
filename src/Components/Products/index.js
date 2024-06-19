@@ -21,24 +21,23 @@ const Products = () => {
         if (data !== null && data.products.length > 0) {
             return data.products.map((product, index) => {
                 const { title, description, images, price } = product;
-                return <Col xs={3}><Card>
-                    <Card.Img variant="top" src={images[0]} style={{ width: '284px', height: "284px" }} />
+                return <Col xs={6} md={3}><Card>
+                    <Card.Img variant="top" src={images[0]} />
                     <Card.Body>
-                        <Card.Title style={{ height: "48px" }}>{title}</Card.Title>
+                        <Card.Title>{title}</Card.Title>
                         <Card.Text>
-                            <Link to={'/product'} style={{textDecoration: 'none', color:"black"}}>
-                                <div style={{ height: "125px" }}>
+                            <Link to={'/product'}>
+                                <div >
                                     {description.length >= 137 ? `${description.slice(0, 157)}...` : description}
                                 </div>
                             </Link>
-                            <div style={{ height: '15px' }}>
+                            <div>
                                 <b>Rs</b> <b><i>{price}</i></b>
                             </div>
-
                         </Card.Text>
                     </Card.Body>
                 </Card>
-                </Col>
+                </Col>  
             });
         }
     }
