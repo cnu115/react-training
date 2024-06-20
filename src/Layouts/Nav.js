@@ -1,9 +1,11 @@
 import React from "react";
-import { Navbar, Container, Nav as Nav2 } from 'react-bootstrap';
+import { Navbar, Container, Nav as Nav2, Badge } from 'react-bootstrap';
 import { useAuth } from "../Auth/authContext";
+import { FaShoppingCart } from 'react-icons/fa';
 
 const Nav = () => {
-    const { user, logout } = useAuth()
+    const { user, logout } = useAuth();
+    const cartCount = 1;
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
             <Container>
@@ -13,9 +15,17 @@ const Nav = () => {
                     <Nav2 className="me-auto">
                         <Nav2.Link href="/">Home</Nav2.Link>
                     </Nav2>
-                    {user !== null ? <Nav2>
-                        <button className="nav-link" onClick={logout} >Logout</button>
-                    </Nav2> :
+                    {user !== null ? <>
+                        <Nav2>
+                            <Nav2.Link href="/cart">
+                                <FaShoppingCart style={{ marginRight: '5px' }} />
+                                Cart {cartCount > 0 &&  <Badge bg="danger">{cartCount}</Badge>}
+                            </Nav2.Link>
+                        </Nav2>
+                        <Nav2>
+                            <button className="nav-link" onClick={logout} >Logout</button>
+                        </Nav2>
+                    </> :
                         (<Nav2>
                             <Nav2.Link href="/login">Login</Nav2.Link>
                             <Nav2.Link eventKey={2} href="/registration">

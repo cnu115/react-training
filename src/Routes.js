@@ -6,6 +6,7 @@ import Registration from "./Auth/registration";
 import { AuthProvider } from "./Auth/authContext";
 import ProtectedRoute from "./Auth/protectedRoute";
 import Products from "./Components/Products";
+import ProductView from "./Components/Products/view";
 
 const Router = () => {
   return (
@@ -13,6 +14,9 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<ProtectedRoute>
           <Products />
+        </ProtectedRoute>} />
+        <Route path="/product-view/:id" element={<ProtectedRoute>
+          <ProductView />
         </ProtectedRoute>} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />

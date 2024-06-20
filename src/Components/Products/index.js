@@ -43,13 +43,13 @@ const Products = () => {
     const getProductsHtml = () => {
         if (currentProducts.length > 0) {
             return currentProducts.map((product, index) => {
-                const { title, description, images, price } = product;
+                const { id, title, description, images, price } = product;
                 return <Col xs={6} md={3}><Card>
                     <Card.Img variant="top" src={images[0]} />
                     <Card.Body>
                         <Card.Title>{title}</Card.Title>
                         <Card.Text>
-                            <Link to={'/product'}>
+                            <Link to={`/product-view/${id}`}>
                                 <div >
                                     {description.length >= 137 ? `${description.slice(0, 157)}...` : description}
                                 </div>
