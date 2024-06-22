@@ -7,20 +7,27 @@ import { AuthProvider } from "./Auth/authContext";
 import ProtectedRoute from "./Auth/protectedRoute";
 import Products from "./Components/Products";
 import ProductView from "./Components/Products/view";
+import { CartProvider } from "./ContextApi/CartContext";
+import Cart from "./Components/Products/cart";
 
 const Router = () => {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={<ProtectedRoute>
-          <Products />
-        </ProtectedRoute>} />
-        <Route path="/product-view/:id" element={<ProtectedRoute>
-          <ProductView />
-        </ProtectedRoute>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registration" element={<Registration />} />
-      </Routes>
+      <CartProvider>
+        <Routes>
+          <Route path="/" element={<ProtectedRoute>
+            <Products />
+          </ProtectedRoute>} />
+          <Route path="/product-view/:id" element={<ProtectedRoute>
+            <ProductView />
+          </ProtectedRoute>} />
+          <Route path="/cart" element={<ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registration" element={<Registration />} />
+        </Routes>
+      </CartProvider>
     </AuthProvider>
   );
 }

@@ -1,12 +1,15 @@
 import { Breadcrumb, Button, Carousel, Col, Container, Image, Row } from "react-bootstrap";
 import Nav from "../../Layouts/Nav";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { getProduct } from "../../Api/services";
+import { CartContext } from "../../ContextApi/CartContext";
 
 const ProductView = () => {
 
     const [product, setProduct] = useState(null);
+
+    const { addToCart } = useContext(CartContext);
 
     let { id } = useParams();
 
@@ -40,8 +43,8 @@ const ProductView = () => {
                 {/* Breadcrumb */}
                 {product !== null &&
                     <Breadcrumb className="my-3">
-                        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                        <Breadcrumb.Item href="/">Products</Breadcrumb.Item>
+                        <Breadcrumb.Item ><Link to={'/'}>Home</Link></Breadcrumb.Item>
+                        <Breadcrumb.Item ><Link to={'/'}>Products</Link></Breadcrumb.Item>
                         <Breadcrumb.Item active>{product.title}</Breadcrumb.Item>
                     </Breadcrumb>
                 }
@@ -57,7 +60,7 @@ const ProductView = () => {
                             <h2>{product.title}</h2>
                             <p>{product.description}</p>
                             <p>Price: ${product.price}</p>
-                            <Button variant="primary">Add to Cart</Button>
+                            <Button variant="primary" onClick={() => addToCart(product)}>Add to Cart</Button>
                         </Col>
                     </Row>
                 }

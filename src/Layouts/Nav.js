@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, Container, Nav as Nav2, Badge } from 'react-bootstrap';
 import { useAuth } from "../Auth/authContext";
 import { FaShoppingCart } from 'react-icons/fa';
+import { Link } from "react-router-dom";
+import { CartContext } from "../ContextApi/CartContext";
 
 const Nav = () => {
     const { user, logout } = useAuth();
-    const cartCount = 1;
+    const { getCartItemsCount } = useContext(CartContext);
+    const cartCount = getCartItemsCount();
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
             <Container>
@@ -13,24 +16,24 @@ const Nav = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav2 className="me-auto">
-                        <Nav2.Link href="/">Home</Nav2.Link>
+                        <Link className="nav-link" to={"/"}>Home</Link>
                     </Nav2>
                     {user !== null ? <>
                         <Nav2>
-                            <Nav2.Link href="/cart">
+                            <Link className="nav-link" to={"/cart"}>
                                 <FaShoppingCart style={{ marginRight: '5px' }} />
-                                Cart {cartCount > 0 &&  <Badge bg="danger">{cartCount}</Badge>}
-                            </Nav2.Link>
+                                Cart {cartCount > 0 && <Badge bg="danger">{cartCount}</Badge>}
+                            </Link>
                         </Nav2>
                         <Nav2>
                             <button className="nav-link" onClick={logout} >Logout</button>
                         </Nav2>
                     </> :
                         (<Nav2>
-                            <Nav2.Link href="/login">Login</Nav2.Link>
-                            <Nav2.Link eventKey={2} href="/registration">
+                            <Link className="nav-link" to={"/login"}>Login</Link>
+                            <Link className="nav-link" eventKey={2} to={"/registration"}>
                                 Registration
-                            </Nav2.Link>
+                            </Link>
                         </Nav2>)
                     }
                 </Navbar.Collapse>
