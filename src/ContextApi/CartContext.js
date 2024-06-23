@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 
 export const CartContext = createContext();
@@ -30,9 +30,28 @@ export const CartProvider = ({ children }) => {
 
         setCart(oldCart)
     }
+
+    const updateQuantity = (product, quantity) => {
+        // debugger;
+        const oldCart = [...cart];
+        const { id } = product;
+        const cartProduct = oldCart.find(c => c.id == id);
+        if(cartProduct !== undefined){
+            cartProduct.quantity = quantity;
+            setCart(oldCart)
+        }
+    }
+
+    const removeCartItem = (id) => {
+        // debugger;
+        const oldCart = [...cart];
+        const productIndex = oldCart.findIndex(c => c.id == id);
+        oldCart.splice(productIndex, 1);
+        setCart(oldCart)
+    }
     // console.log('cart', cart)
 
-    return <CartContext.Provider value={{ cart, addToCart, getCartItemsCount }}>
+    return <CartContext.Provider value={{ cart, addToCart, getCartItemsCount, updateQuantity, removeCartItem }}>
         {children}
     </CartContext.Provider>
 }

@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { getProduct } from "../../Api/services";
 import { CartContext } from "../../ContextApi/CartContext";
+import StarRating from "../../Utility/StarRating";
+import StarRatings from 'react-star-ratings';
 
 const ProductView = () => {
 
@@ -59,7 +61,17 @@ const ProductView = () => {
                         <Col md={6}>
                             <h2>{product.title}</h2>
                             <p>{product.description}</p>
+                            <StarRating productRating={product?.rating}/>
+                            
+                            {/* <StarRatings
+                                rating={product?.rating}
+                                starDimension="20px"
+                                starSpacing="5px"
+                                starRatedColor="red"
+                            /> */}
+                            <br />
                             <p>Price: ${product.price}</p>
+
                             <Button variant="primary" onClick={() => addToCart(product)}>Add to Cart</Button>
                         </Col>
                     </Row>

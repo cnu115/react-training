@@ -55,7 +55,7 @@ const Products = () => {
                                 </div>
                             </Link>
                             <div>
-                                <b>Rs</b> <b><i>{price}</i></b>
+                                <b>$</b><b><i>{price}</i></b>
                             </div>
                         </Card.Text>
                     </Card.Body>
