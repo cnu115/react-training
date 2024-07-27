@@ -5,40 +5,49 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { getProducts } from "../../Api/services";
 import './index.css';
 import Pagination from "../../Utility/pagination";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../../Layouts/Loader";
 
 const Products = () => {
-    const [data, setData] = useState(null);
-    const [products, setProducts] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [currentProducts, setCurrentProducts] = useState(0);
+    const [pageNumbers, setPageNumbers] = useState([]);
+
+    const dispatch = useDispatch();
+
+    const { data, loading, error } = useSelector((state) => state.products);
+
     const itemsPerPage = 8;
+
+    console.log('data', data, 'loading', loading)
 
     // Logic for displaying current products
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
 
     // Logic for displaying page numbers
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(products.length / itemsPerPage); i++) {
-        pageNumbers.push(i);
-    }
+
 
     useEffect(() => {
-        fetchProducts();
-    }, []);
+        dispatch(getProducts());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (data?.products) {
+            setCurrentProducts(data?.products.slice(indexOfFirstItem, indexOfLastItem));
+            const numbers = [];
+            for (let i = 1; i <= Math.ceil(data?.products.length / itemsPerPage); i++) {
+                numbers.push(i);
+            };
+            setPageNumbers(numbers);
+        }
+    }, [data])
 
     const handlePageClick = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-
-    const fetchProducts = async () => {
-        const { data } = await getProducts();
-        const { products } = data;
-        setProducts(products);
-        setData(data);
-    }
 
     const getProductsHtml = () => {
         if (currentProducts.length > 0) {
@@ -69,14 +78,16 @@ const Products = () => {
         <div>
             <Nav />
             <Container>
-                <Row>
-                    {getProductsHtml()}
-                </Row>
-                <Row>
-                    <Col className="d-flex justify-content-end">
-                        <Pagination pageNumbers={pageNumbers} currentPage={currentPage} handlePageClick={handlePageClick} />
-                    </Col>
-                </Row>
+                {!loading && data?.products ? <>
+                    <Row>
+                        {getProductsHtml()}
+                    </Row>
+                    <Row>
+                        <Col className="d-flex justify-content-end">
+                            <Pagination pageNumbers={pageNumbers} currentPage={currentPage} handlePageClick={handlePageClick} />
+                        </Col>
+                    </Row>
+                </> : <Loader />}
             </Container>
         </div>
     )

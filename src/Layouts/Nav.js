@@ -4,11 +4,13 @@ import { useAuth } from "../Auth/authContext";
 import { FaShoppingCart } from 'react-icons/fa';
 import { Link } from "react-router-dom";
 import { CartContext } from "../ContextApi/CartContext";
+import { useSelector } from "react-redux";
 
 const Nav = () => {
     const { user, logout } = useAuth();
     const { getCartItemsCount } = useContext(CartContext);
     const cartCount = getCartItemsCount();
+    const {value} = useSelector((state) => state.counter);
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
             <Container>
@@ -17,6 +19,7 @@ const Nav = () => {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav2 className="me-auto">
                         <Link className="nav-link" to={"/"}>Home</Link>
+                        <Link className="nav-link" to={"/counter"}>Counter {value}</Link>
                     </Nav2>
                     {user !== null ? <>
                         <Nav2>

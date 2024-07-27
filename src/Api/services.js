@@ -1,4 +1,5 @@
 import axios from "axios";
+import { fetchProductsFailure, fetchProductsRequest, fetchProductsSuccess } from "../actions";
 
 const host = `https://dummyjson.com`;
 
@@ -17,10 +18,19 @@ export const userAuthInfo = async (token) => {
     });
 }
 
-export const getProducts = async () => {
-    return await axios(getProductsApi, {
-        method: 'GET',
-    });
+export const getProducts = () => {
+    return async (dispatch) => {
+        dispatch(fetchProductsRequest());
+        try {
+            const { data } = await axios(getProductsApi, {
+                method: 'GET',
+            });
+            dispatch(fetchProductsSuccess(data));
+        } catch (error) {
+            dispatch(fetchProductsFailure(error));
+        }
+    }
+
 }
 
 export const getProduct = async (id) => {

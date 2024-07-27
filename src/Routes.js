@@ -9,6 +9,7 @@ import Products from "./Components/Products";
 import ProductView from "./Components/Products/view";
 import { CartProvider } from "./ContextApi/CartContext";
 import Cart from "./Components/Products/cart";
+import ReduxExample from "./Components/Products/reduxExample";
 
 const Router = () => {
   return (
@@ -26,6 +27,7 @@ const Router = () => {
           </ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/counter" element={<ReduxExample />} />
         </Routes>
       </CartProvider>
     </AuthProvider>
