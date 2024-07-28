@@ -21,8 +21,6 @@ const Products = () => {
 
     const itemsPerPage = 8;
 
-    console.log('data', data, 'loading', loading)
-
     // Logic for displaying current products
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;

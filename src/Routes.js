@@ -10,6 +10,8 @@ import ProductView from "./Components/Products/view";
 import { CartProvider } from "./ContextApi/CartContext";
 import Cart from "./Components/Products/cart";
 import ReduxExample from "./Components/Products/reduxExample";
+import Dashboard from "./Components/Dashboard";
+import AdminProducts from "./Components/Admin/Products";
 
 const Router = () => {
   return (
@@ -28,6 +30,8 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/counter" element={<ReduxExample />} />
+          <Route path="/admin" element={<Dashboard />}/>
+          <Route path="/admin/products" element={<AdminProducts />} />
         </Routes>
       </CartProvider>
     </AuthProvider>
