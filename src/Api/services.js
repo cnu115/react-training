@@ -1,5 +1,5 @@
 import axios from "axios";
-import { deleteProductFailure, deleteProductRequest, deleteProductSuccess, fetchProductsFailure, fetchProductsRequest, fetchProductsSuccess } from "../actions";
+import { deleteProductFailure, deleteProductRequest, deleteProductSuccess, fetchProductsFailure, fetchProductsRequest, fetchProductsSuccess, updateProductFailure, updateProductRequest, updateProductSuccess } from "../actions";
 
 const host = `https://dummyjson.com`;
 
@@ -43,6 +43,27 @@ export const deleteProduct = (id) => {
             dispatch(deleteProductSuccess(id));
         } catch (error) {
             dispatch(deleteProductFailure(error));
+        }
+    }
+
+}
+
+export const updateProduct = (body) => {
+    const {id, title, brand} = body;
+    return async (dispatch) => {
+        dispatch(updateProductRequest());
+        try {
+            const { data } = await axios(getProductApi(id), {
+                method: 'PUT', /* or PATCH */
+                headers: { 'Content-Type': 'application/json' },
+                data: JSON.stringify({
+                    title: title,
+                    brand: brand
+                })
+            });
+            dispatch(updateProductSuccess(data));
+        } catch (error) {
+            dispatch(updateProductFailure(error));
         }
     }
 

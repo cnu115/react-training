@@ -19,7 +19,7 @@ const Nav = () => {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav2 className="me-auto">
                         <Link className="nav-link" to={"/"}>Home</Link>
-                        <Link className="nav-link" to={"/counter"}>Counter {value}</Link>
+                        {/* <Link className="nav-link" to={"/counter"}>Counter {value}</Link> */}
                     </Nav2>
                     {user !== null ? <>
                         <Nav2>

@@ -1,4 +1,4 @@
-import { DECREMENT, DELETE_PRODUCT_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, FETCH_PRODUCT_FAILURE, FETCH_PRODUCT_REQUEST, FETCH_PRODUCT_SUCCESS, INCREMENT } from "./types"
+import { DECREMENT, DELETE_PRODUCT_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, FETCH_PRODUCT_FAILURE, FETCH_PRODUCT_REQUEST, FETCH_PRODUCT_SUCCESS, INCREMENT, UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_REQUEST, UPDATE_PRODUCT_SUCCESS } from "./types"
 
 export const increment = () => ({
     type: INCREMENT
@@ -35,5 +35,20 @@ export const deleteProductSuccess = (id) => ({
 
 export const deleteProductFailure = (error) => ({
     type: DELETE_PRODUCT_FAILURE,
+    payload: error
+});
+
+
+export const updateProductRequest = () => ({
+    type: UPDATE_PRODUCT_REQUEST
+});
+
+export const updateProductSuccess = (data) => ({
+    type: UPDATE_PRODUCT_SUCCESS,
+    payload: data
+});
+
+export const updateProductFailure = (error) => ({
+    type: UPDATE_PRODUCT_FAILURE,
     payload: error
 });

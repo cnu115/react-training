@@ -1,16 +1,27 @@
-import React, { useEffect } from 'react';
-import { Container, Row, Col, Card, Table, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteProduct, getProducts } from '../../../Api/services';
+import { deleteProduct, getProducts, updateProduct } from '../../../Api/services';
 import Loader from '../../../Layouts/Loader';
+import BootstrapToast from '../../../Utility/Toast';
 
 const Products = () => {
 
-    const { data, loading, error } = useSelector((state) => state.products)
+    const [show, setShow] = useState(false);
+    const [product, setProduct] = useState({});
+    const [toast, setToast]= useState({
+        variant: 'Success',
+        title: '',
+        body: '',
+    })
+
+    const [showToast, setShowToast] = useState(false);
+
+    const { data, loading, error } = useSelector((state) => state.products);
 
     const dispatch = useDispatch();
 
-    console.log('loading', loading, 'data', data)
+    // console.log('loading', loading, 'data', data)
 
     useEffect(() => {
         dispatch(getProducts())
@@ -21,6 +32,15 @@ const Products = () => {
     const handleDelete = (id) => {
         // debugger
         dispatch(deleteProduct(id));
+    }
+
+    const handleClose = () => {
+        setShow(false);
+    }
+
+    const handleEdit = (product) => {
+        setShow(true);
+        setProduct(product)
     }
 
     const getTableBody = () => {
@@ -35,7 +55,7 @@ const Products = () => {
                     <td>{category}</td>
                     <td>{price}</td>
                     <td>
-                        <Button variant='primary' >Edit</Button>
+                        <Button variant='primary' onClick={() => handleEdit(product)}>Edit</Button>
                         {' '}
                         <Button variant='danger' onClick={() => handleDelete(id)}>Delete</Button>
                     </td>
@@ -44,8 +64,35 @@ const Products = () => {
         }
     }
 
+    const handleInputChange = (event) => {
+        // debugger;
+        const { name, value } = event.target;
+        setProduct({
+            ...product,
+            [name]: value
+        })
+    }
+
+    const handleUpdate = () => {
+        dispatch(updateProduct(product));
+        setShowToast(true);
+        setToast({
+            ...toast,
+            title: 'Product Update',
+            body: 'Product Updated Successfully!'
+        })
+        handleClose(false);
+    } 
+
     return (
         <div className="main-content">
+            <BootstrapToast 
+                variant={toast.variant} 
+                title={toast.title} 
+                body={toast.body} 
+                show={showToast} 
+                setShow={setShowToast}
+            />
             <Container>
                 <Row>
                     <Col sm={6}>
@@ -83,6 +130,33 @@ const Products = () => {
                     {/* You can add more columns/cards here for other products */}
                 </Row>
             </Container>
+            {show &&
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Product</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3" controlId="title">
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control type="text" name="title" value={product?.title} onChange={(e) => handleInputChange(e)} />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="brand">
+                                <Form.Label>Brand</Form.Label>
+                                <Form.Control type="text" name="brand" value={product?.brand} onChange={(e) => handleInputChange(e)} />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={handleUpdate}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            }
         </div>
     );
 };
