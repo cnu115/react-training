@@ -7,6 +7,7 @@ import './index.css';
 import Pagination from "../../Utility/pagination";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../Layouts/Loader";
+import SearchBox from "../../Utility/SearchBox";
 
 const Products = () => {
 
@@ -14,6 +15,7 @@ const Products = () => {
 
     const [currentProducts, setCurrentProducts] = useState(0);
     const [pageNumbers, setPageNumbers] = useState([]);
+    const [products, setProducts] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -33,15 +35,21 @@ const Products = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (data?.products) {
-            setCurrentProducts(data?.products.slice(indexOfFirstItem, indexOfLastItem));
+        if (data?.products.length > 0) {
+            setProducts(data?.products);
+        }
+    }, [data])
+
+    useEffect(() => {
+        if (products.length > 0) {
+            setCurrentProducts(products.slice(indexOfFirstItem, indexOfLastItem));
             const numbers = [];
-            for (let i = 1; i <= Math.ceil(data?.products.length / itemsPerPage); i++) {
+            for (let i = 1; i <= Math.ceil(products.length / itemsPerPage); i++) {
                 numbers.push(i);
             };
             setPageNumbers(numbers);
         }
-    }, [data])
+    }, [products])
 
     const handlePageClick = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -72,11 +80,25 @@ const Products = () => {
         }
     }
 
+    const onSearch = (query) => {
+        if (query) {
+            // debugger;
+            const filteredProducts = products.filter(product => {
+                return (product?.title && product.title.toLowerCase().includes(query)) || (product?.brand && product.brand.toLowerCase().includes(query))
+
+            });
+            setProducts(filteredProducts);
+        } else {
+            setProducts(data?.products);
+        }
+    }
+
     return (
         <div>
             <Nav />
             <Container>
-                {!loading && data?.products ? <>
+                <SearchBox placeholder={'Search Products'} onSearch={onSearch} />
+                {!loading && products ? <>
                     <Row>
                         {getProductsHtml()}
                     </Row>

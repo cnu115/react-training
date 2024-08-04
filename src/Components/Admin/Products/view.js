@@ -4,12 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteProduct, getProducts, updateProduct } from '../../../Api/services';
 import Loader from '../../../Layouts/Loader';
 import BootstrapToast from '../../../Utility/Toast';
+import Pagination from '../../../Utility/pagination';
 
 const Products = () => {
 
     const [show, setShow] = useState(false);
     const [product, setProduct] = useState({});
-    const [toast, setToast]= useState({
+
+    const [currentProducts, setCurrentProducts] = useState([]);
+
+    const [toast, setToast] = useState({
         variant: 'Success',
         title: '',
         body: '',
@@ -17,15 +21,38 @@ const Products = () => {
 
     const [showToast, setShowToast] = useState(false);
 
+    const [pageNumbers, setPageNumbers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const { data, loading, error } = useSelector((state) => state.products);
+
+    const itemsPerPage = 10;
 
     const dispatch = useDispatch();
 
     // console.log('loading', loading, 'data', data)
 
+
     useEffect(() => {
-        dispatch(getProducts())
+        dispatch(getProducts());
     }, [dispatch]);
+
+    useEffect(() => {
+
+        if (data?.products && data?.products.length > 0) {
+            const indexOfLastItem = currentPage * itemsPerPage;
+            const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+            setCurrentProducts(data?.products.slice(indexOfFirstItem, indexOfLastItem));
+
+            const numbers = [];
+            for (let i = 1; i <= Math.ceil(data.products.length / itemsPerPage); i++) {
+                numbers.push(i);
+            };
+            setPageNumbers(numbers);
+        }
+
+    }, [data, currentPage]);
 
     // console.log('data', data)
 
@@ -44,9 +71,9 @@ const Products = () => {
     }
 
     const getTableBody = () => {
-        const { products } = data;
-        if (products.length > 0) {
-            return products.map((product, index) => {
+
+        if (currentProducts.length > 0) {
+            return currentProducts.map((product, index) => {
                 const { id, title, brand, category, price } = product;
                 return <tr key={`${title}_${index}`}>
                     <td>{id}</td>
@@ -82,15 +109,19 @@ const Products = () => {
             body: 'Product Updated Successfully!'
         })
         handleClose(false);
-    } 
+    }
+
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    }
 
     return (
         <div className="main-content">
-            <BootstrapToast 
-                variant={toast.variant} 
-                title={toast.title} 
-                body={toast.body} 
-                show={showToast} 
+            <BootstrapToast
+                variant={toast.variant}
+                title={toast.title}
+                body={toast.body}
+                show={showToast}
                 setShow={setShowToast}
             />
             <Container>
@@ -109,21 +140,24 @@ const Products = () => {
                 <Row>
                     <Col sm={12}>
                         {!loading && data?.products ?
-                            <Table striped bordered hover>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Title</th>
-                                        <th>Brand</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {getTableBody()}
-                                </tbody>
-                            </Table>
+                            <>
+                                <Table striped bordered hover>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Brand</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {getTableBody()}
+                                    </tbody>
+                                </Table>
+                                <Pagination pageNumbers={pageNumbers} currentPage={currentPage} handlePageClick={handlePageClick} />
+                            </>
                             : <Loader />
                         }
                     </Col>
